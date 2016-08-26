@@ -2,17 +2,13 @@
 
 'use strict';
 
-const {
-  Transform
-} = require('stream')
+const es = require('event-stream')
+let array = []
 
-module.exports = Transform({
-  transform(buff, enc, cb) {
-    cb(null, `${buff.toString().toUpperCase()}\n`)
+module.exports = (es.map(function(line, cb) {
+  if (array.length < 10) {
+    array.push(line)
+    cb(null, line)
   }
-
-  // transform: function(buff, enc, cb) {
-  //   cb(null, `${buff.toString().toUpperCase()}\n`)
-  // }
-
-})
+  cb()
+}))
