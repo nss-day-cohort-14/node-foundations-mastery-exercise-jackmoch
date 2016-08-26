@@ -10,20 +10,19 @@ const limit = require('./limit-ten')
 let [, , args] = process.argv;
 const readStream = createReadStream('/usr/share/dict/words')
 
-function usage(args) {
-  if (args !== undefined) {
-    readStream
-      .pipe(es.split('\n'))
-      .pipe(es.map(function(line, cb) {
-        if (line.toUpperCase().startsWith(args.toUpperCase())) {
-          let match = line + '\n'
-          cb(null, match)
-        }
-        cb()
-      }))
-      .pipe(limit)
-      .pipe(process.stdout)
-  }
+if (!args) {
   process.stdout.write('Usage: program req1\n')
+  process.exit(1)
 }
-usage(args)
+
+readStream
+  .pipe(es.split('\n'))
+  .pipe(es.map(function(line, cb) {
+    if (line.toUpperCase().startsWith(args.toUpperCase())) {
+      let match = line + '\n'
+      cb(null, match)
+    }
+    cb()
+  }))
+  .pipe(limit)
+  .pipe(process.stdout)
