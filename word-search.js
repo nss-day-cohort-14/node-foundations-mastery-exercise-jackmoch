@@ -21,3 +21,7 @@ readStream
   }))
   .pipe(limit)
   .pipe(process.stdout)
+
+if (!args) {
+  process.stdout.write('Usage: program req1\n') + process.exit(1)
+}
